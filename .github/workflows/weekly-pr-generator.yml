@@ -1,0 +1,33 @@
+name: 🔁 Auto Weekly PR Generator
+
+on:
+  schedule:
+    - cron: '0 3 * * 1' # Every Monday 3AM UTC
+  workflow_dispatch:
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📝 Create dummy file
+        run: |
+          echo "🤖 Weekly auto PR - $(date)" >> weekly-boost.md
+
+      - name: ⚙️ Commit & push
+        run: |
+          git config --global user.name "nholuongut"
+          git config --global user.email "luongutnho.dxc@gmail.com"
+          git checkout -b weekly-boost-$(date +%Y%m%d)
+          git add weekly-boost.md
+          git commit -m "chore: 🧹 Weekly contribution"
+          git push --set-upstream origin weekly-boost-$(date +%Y%m%d)
+
+      - name: 🚀 Create PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "chore: 🧹 Weekly contribution"
+          body: "This PR was auto-generated to boost activity. Keep rocking 🚀"
+          branch: weekly-boost-$(date +%Y%m%d)
