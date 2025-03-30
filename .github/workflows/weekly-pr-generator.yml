@@ -8,6 +8,9 @@ on:
 jobs:
   pr:
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: weekly-boost-${{ github.run_id }}
+
     steps:
       - name: 📥 Checkout repo
         uses: actions/checkout@v3
@@ -20,14 +23,14 @@ jobs:
         run: |
           git config --global user.name "nholuongut"
           git config --global user.email "luongutnho.dxc@gmail.com"
-          git checkout -b weekly-boost-$(date +%Y%m%d)
+          git checkout -b $BRANCH_NAME
           git add weekly-boost.md
           git commit -m "chore: 🧹 Weekly contribution"
-          git push --set-upstream origin weekly-boost-$(date +%Y%m%d)
+          git push --set-upstream origin $BRANCH_NAME
 
       - name: 🚀 Create PR
         uses: peter-evans/create-pull-request@v5
         with:
           title: "chore: 🧹 Weekly contribution"
           body: "This PR was auto-generated to boost activity. Keep rocking 🚀"
-          branch: weekly-boost-$(date +%Y%m%d)
+          branch: ${{ env.BRANCH_NAME }}
