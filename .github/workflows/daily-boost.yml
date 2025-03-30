@@ -1,0 +1,23 @@
+name: 🔁 Daily Auto Commit Boost
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Every day at 00:00 UTC
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "nholuongut"
+          git config --global user.email "luongutnho.dxc@gmail.com"
+
+      - name: Make empty commit
+        run: |
+          git commit --allow-empty -m "chore: 🤖 daily commit boost"
+          git push
