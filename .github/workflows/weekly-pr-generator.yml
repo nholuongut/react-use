@@ -1,4 +1,4 @@
-name: 🔁 Auto Weekly PR Generator
+name: 🖁️ Auto Weekly PR Generator
 
 on:
   schedule:
@@ -8,29 +8,23 @@ on:
 jobs:
   pr:
     runs-on: ubuntu-latest
-    env:
-      BRANCH_NAME: weekly-boost-${{ github.run_id }}
 
     steps:
-      - name: 📥 Checkout repo
+      - name: 📥 Checkout repository
         uses: actions/checkout@v3
 
-      - name: 📝 Create dummy file
+      - name: 📋 Create dummy file
         run: |
           echo "🤖 Weekly auto PR - $(date)" >> weekly-boost.md
 
-      - name: ⚙️ Commit & push
-        run: |
-          git config --global user.name "nholuongut"
-          git config --global user.email "luongutnho.dxc@gmail.com"
-          git checkout -b $BRANCH_NAME
-          git add weekly-boost.md
-          git commit -m "chore: 🧹 Weekly contribution"
-          git push --set-upstream origin $BRANCH_NAME
-
-      - name: 🚀 Create PR
+      - name: 🚀 Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: 🧹 Weekly contribution"
           title: "chore: 🧹 Weekly contribution"
-          body: "This PR was auto-generated to boost activity. Keep rocking 🚀"
-          branch: ${{ env.BRANCH_NAME }}
+          body: |
+            This PR was auto-generated to boost activity 🚀
+            🗓️ Date: $(date +'%Y-%m-%d')
+          branch: weekly-boost-${{ github.run_id }}
+          delete-branch: true
